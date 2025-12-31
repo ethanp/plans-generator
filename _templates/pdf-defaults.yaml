@@ -1,0 +1,58 @@
+# Shared PDF configuration for all plan documents
+# This file is automatically included by build-pdf.sh
+# Individual documents only need: title, subtitle, author, date
+
+# Title page styling
+titlepage: true
+titlepage-color: "0d1b2a"
+titlepage-text-color: "e0e1dd"
+titlepage-rule-color: "00b4d8"
+
+# Table of contents
+toc: true
+toc-own-page: true
+
+# Links
+colorlinks: true
+linkcolor: "blue"
+urlcolor: "blue"
+
+# Fonts (Computer Modern - standard in CS papers)
+fontfamily: lmodern
+
+# LaTeX packages and configuration
+header-includes:
+  - \usepackage{lmodern}
+  - \usepackage[T1]{fontenc}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{float}
+  - |
+    \makeatletter
+    \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+      {3.25ex \@plus1ex \@minus.2ex}%
+      {0.5em}%
+      {\normalfont\normalsize\bfseries}}
+    \makeatother
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes.geometric, shapes.symbols, shapes.misc, arrows.meta, positioning, fit, backgrounds, calc, shadows}
+  - \usepackage[underline=false,rounded corners=true]{pgf-umlsd}
+  - \renewcommand{\arraystretch}{1.4}
+  - |
+    \tikzset{
+      startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=0.8cm, text centered, draw=black, fill=red!20, font=\small},
+      process/.style={rectangle, minimum width=4cm, minimum height=0.8cm, text centered, draw=black, fill=blue!15, font=\small},
+      decision/.style={diamond, minimum width=2.5cm, minimum height=1cm, text centered, draw=black, fill=green!15, font=\small, aspect=2},
+      arrow/.style={thick,->,>=Stealth},
+      box/.style={rectangle, draw=black, thick, minimum width=4cm, minimum height=1cm, text centered, fill=gray!10, font=\small},
+      service/.style={rectangle, draw=black, thick, minimum width=3.5cm, minimum height=1.2cm, text centered, rounded corners, font=\small},
+      bigbox/.style={rectangle, draw=black!60, thick, rounded corners, fill=gray!5},
+      label/.style={font=\footnotesize\ttfamily},
+      database/.style={cylinder, shape border rotate=90, draw=black, thick, minimum height=1.2cm, minimum width=1.8cm, aspect=0.25, text centered, font=\small},
+      storage/.style={cylinder, shape border rotate=90, draw=black, thick, minimum height=1cm, minimum width=1.5cm, aspect=0.3, text centered, font=\small},
+      api/.style={rectangle, draw=black, thick, minimum width=2.2cm, minimum height=0.9cm, text centered, rounded corners=3pt, font=\small},
+      syncengine/.style={ellipse, draw=black, thick, minimum width=2.4cm, minimum height=1cm, text centered, font=\small},
+      client/.style={rectangle, draw=black, thick, minimum width=1.8cm, minimum height=1.2cm, text centered, rounded corners=2pt, font=\small, drop shadow={shadow xshift=0.08cm, shadow yshift=-0.08cm, opacity=0.3}}
+    }
+
