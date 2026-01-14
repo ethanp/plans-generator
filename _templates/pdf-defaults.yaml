@@ -11,6 +11,10 @@ titlepage-rule-color: "00b4d8"
 # Table of contents
 toc: true
 toc-own-page: true
+toc-depth: 6
+
+# Section numbering (1.1, 1.1.1, etc.)
+numbersections: true
 
 # Links
 colorlinks: true
@@ -34,7 +38,18 @@ header-includes:
       {3.25ex \@plus1ex \@minus.2ex}%
       {0.5em}%
       {\normalfont\normalsize\bfseries}}
+    \renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+      {2.5ex \@plus1ex \@minus.2ex}%
+      {0.3em}%
+      {\normalfont\small\bfseries}}
+    \newcounter{subsubparagraph}
+    \newcommand\subsubparagraph{\@startsection{subsubparagraph}{6}{\z@}%
+      {2ex \@plus0.5ex \@minus.1ex}%
+      {0.2em}%
+      {\normalfont\small\itshape}}
     \makeatother
+  - \setcounter{secnumdepth}{6}
+  - \setcounter{tocdepth}{6}
   - \usepackage{tikz}
   - \usetikzlibrary{shapes.geometric, shapes.symbols, shapes.misc, arrows.meta, positioning, fit, backgrounds, calc, shadows}
   - \usepackage[underline=false,rounded corners=true]{pgf-umlsd}

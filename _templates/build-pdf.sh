@@ -62,6 +62,17 @@ if [ ! -f "$INPUT" ]; then
   exit 1
 fi
 
+# Lint markdown before building
+LINT_SCRIPT="$SCRIPT_DIR/lint-markdown.py"
+if [ -f "$LINT_SCRIPT" ]; then
+  python3 "$LINT_SCRIPT" "$INPUT" || {
+    echo "❌ Markdown linting failed. Fix errors before building PDF."
+    exit 1
+  }
+else
+  echo "⚠️  Warning: lint-markdown.py not found, skipping lint check"
+fi
+
 if [ -z "$TEMPLATE" ]; then
   echo "Eisvogel template not found. Installing..."
   curl -sL https://github.com/Wandmalfarbe/pandoc-latex-template/releases/latest/download/Eisvogel.tar.gz | tar xz -C "$SCRIPT_DIR"

@@ -63,9 +63,13 @@ All common styling lives in `_templates/pdf-defaults.yaml`:
 |---------|---------|
 | `titlepage: true` | Generates a styled title page |
 | `toc: true` | Generates table of contents |
+| `toc-depth: 6` | Includes H1-H6 in TOC (default: 3) |
+| `numbersections: true` | Adds hierarchical numbering (1.1, 1.1.1, etc.) |
 | `fontfamily: lmodern` | Computer Modern fonts (standard in CS papers) |
 | `\usepackage{float}` | Enables `[H]` placement for figures |
 | `\renewcommand\paragraph` | Makes H4 headers block-level (not inline) |
+| `\renewcommand\subparagraph` | Makes H5 headers block-level (not inline) |
+| `\newcommand\subsubparagraph` | Adds H6 support (italic, smaller) |
 | `\renewcommand{\arraystretch}{1.4}` | Increases table row height |
 | TikZ styles | Pre-defined shapes for architecture diagrams |
 
@@ -251,7 +255,7 @@ It's the same mechanism used for:
 
 ### Use Proper Headers (Not Bold)
 
-Use `###` and `####` for subsections, not `**bold text**`:
+Use `###` through `######` for subsections, not `**bold text**`:
 
 ```markdown
 ### Good: This is a proper header
@@ -353,9 +357,9 @@ If you see `Unicode character X not set up for use with LaTeX`:
 2. Replace with ASCII equivalent (see table above)
 3. This only affects code blocks; regular text handles Unicode fine
 
-### H4 Headers Rendering Inline
+### H4/H5/H6 Headers Rendering Inline
 
-This is fixed automatically by `pdf-defaults.yaml`. If you're not using the build script, add the paragraph fix to your frontmatter's `header-includes`.
+This is fixed automatically by `pdf-defaults.yaml`. H4-H6 are configured to render as block-level headers instead of inline. H6 (`######`) is styled in italic to distinguish from H5.
 
 ### Table Columns Overlapping
 
