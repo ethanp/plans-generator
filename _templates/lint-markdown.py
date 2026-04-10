@@ -24,20 +24,26 @@ class MarkdownLinter:
     def check_blank_line_before_lists(self):
         """Check that lists have a blank line before them."""
         for i, line in enumerate(self.lines, start=1):
-            # Check if this line starts a list (bullet or numbered)
+            # Check if this line starts a list item (bullet or numbered)
             if re.match(r'^\s*[-*+]\s', line) or re.match(r'^\s*\d+[.)]\s', line):
-                # Check previous line (if exists and not first line)
                 if i > 1:
                     prev_line = self.lines[i - 2]  # i is 1-indexed, array is 0-indexed
-                    # Allow if previous line is blank or is a list continuation
-                    if prev_line.strip() and not re.match(r'^\s*[-*+\d]', prev_line):
-                        # Check if it's not a code block continuation
-                        if not prev_line.rstrip().endswith('\\'):
-                            self.errors.append((
-                                i,
-                                f"Missing blank line before list (line {i}). "
-                                f"Add a blank line before: {line[:50]}"
-                            ))
+                    # No error if previous line is blank
+                    if not prev_line.strip():
+                        continue
+                    # No error if previous line is another list item marker
+                    if re.match(r'^\s*[-*+\d]', prev_line):
+                        continue
+                    # No error if previous line is an indented continuation of a
+                    # list item (e.g. a wrapped multi-line numbered list entry)
+                    if re.match(r'^\s+\S', prev_line):
+                        continue
+                    if not prev_line.rstrip().endswith('\\'):
+                        self.errors.append((
+                            i,
+                            f"Missing blank line before list (line {i}). "
+                            f"Add a blank line before: {line[:50]}"
+                        ))
 
     def check_blank_line_before_tables(self):
         """Check that tables have a blank line before them."""
@@ -120,12 +126,30 @@ class MarkdownLinter:
                         ))
                         break
 
+    def check_unicode_in_text(self):
+        """Check for Unicode characters in normal text."""
+        in_code_block = False
+        for i, line in enumerate(self.lines, start=1):
+            stripped = line.strip()
+            if stripped.startswith('```'):
+                in_code_block = not in_code_block
+                continue
+            if in_code_block:
+                continue
+            if re.search(r'[^\x00-\x7F]', line):
+                self.errors.append((
+                    i,
+                    f"Unicode character in text (line {i}). "
+                    f"Use ASCII alternative. Found in: {line[:50]}"
+                ))
+
     def lint(self) -> bool:
         """Run all lint checks. Returns True if no errors."""
         self.check_blank_line_before_lists()
         self.check_blank_line_before_tables()
         self.check_proper_headers()
         self.check_unicode_in_code_blocks()
+        self.check_unicode_in_text()
         return len(self.errors) == 0
 
     def print_errors(self):
